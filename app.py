@@ -1,35 +1,36 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI
 from pydantic import BaseModel
-import vanna
-import json
 from vanna.remote import VannaDefault
-from fastapi.responses import JSONResponse
 import os
 from dotenv import load_dotenv
+
 app = FastAPI()
 
+# Load environment variables
 load_dotenv()
+
 # Initialize Vanna
 api_key = os.getenv('API')
 model = 'quickbooks_2'
 vn = VannaDefault(model=model, api_key=api_key)
 
-# Connect to Postgres
-vn.connect_to_postgres(host='viaduct.proxy.rlwy.net', dbname='railway', user='readonly_user', password='ratmaxi88888888', port='59459')
-
+# Connect to PostgreSQL
+vn.connect_to_postgres(
+    host=os.getenv('DB_HOST'),
+    dbname=os.getenv('DB_NAME'),
+    user=os.getenv('DB_USER'),
+    password=os.getenv('DB_PASSWORD'),
+    port=os.getenv('DB_PORT')
+)
 
 class Question(BaseModel):
     question: str
 
-
 @app.post("/ask/")
-async def ask_question(question: str):
-    result = vn.ask(question=question, visualize=False)
-    # result_json = json.dumps(result)
-    # print('************* '+type(result))
+async def ask_question(question: Question):
+    result = vn.ask(question=question.question, visualize=False)
     return str(result)
-
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=$PORT)
+    uvicorn.run(app, host="0.0.0.0", port=int(os.environ.get("PORT", 8000)))
