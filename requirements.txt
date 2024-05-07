@@ -2,4 +2,5 @@ fastapi
 pydantic
 uvicorn
 python-dotenv
-vanna
+vanna[postgres]
+libpq-dev
