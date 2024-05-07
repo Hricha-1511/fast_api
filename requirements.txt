@@ -4,3 +4,4 @@ pydantic
 vanna
 uvicorn
 python-dotenv
+psycopg2-binary==2.9.1
