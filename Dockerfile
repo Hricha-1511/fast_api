@@ -16,6 +16,10 @@ RUN pip install --upgrade pip==24.0
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install -r requirements.txt
 RUN pip install fastapi
+RUN pip install 'vanna[postgres]'
+RUN pip install uvicorn
+RUN pip install pydantic
+RUN pip install python-dotenv
 
 # Command to run the application
 CMD [ "python", "app.py" ]
