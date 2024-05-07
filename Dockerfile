@@ -15,6 +15,7 @@ RUN pip install --upgrade pip==24.0
 # Install dependencies within the virtual environment
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install -r requirements.txt
+RUN pip install fastapi
 
 # Command to run the application
 CMD [ "python", "app.py" ]
