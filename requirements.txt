@@ -3,3 +3,4 @@ pydantic
 vanna
 uvicorn
 python-dotenv
+'vanna[postgres]'
