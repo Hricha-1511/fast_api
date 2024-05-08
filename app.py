@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from vanna.remote import VannaDefault
 import os
+import prompt
 from dotenv import load_dotenv
 
 app = FastAPI()
@@ -28,8 +29,22 @@ class Question(BaseModel):
 
 @app.post("/ask/")
 async def ask_question(question: Question):
-    result = vn.ask(question=question.question, visualize=False)
-    return str(result)
+    # result = vn.ask(question=question.question, visualize=False)
+    question = question.question
+    questions = vn.get_similar_question_sql(question) #get all similar question and query pair
+    documentation = vn.get_related_documentation(question) # get all similar documentation
+    ddl = vn.get_related_ddl(question) # get all ddl.
+    message_log = prompt.get_message_log_prompt(6000, question, ddl, documentation, questions) # create prompt
+    sql_q = vn.submit_prompt(
+    [
+        vn.system_message(str(message_log) + 'Note: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
+        vn.user_message(question),
+    ]
+)
+    print(sql_q)
+    print(message_log)
+    result = vn.run_sql(sql_q)
+    return result, sql_q
 
 if __name__ == "__main__":
     import uvicorn
