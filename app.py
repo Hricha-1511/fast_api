@@ -4,6 +4,7 @@ from vanna.remote import VannaDefault
 import os
 import prompt
 from dotenv import load_dotenv
+import pandas as pd
 
 app = FastAPI()
 
@@ -44,6 +45,8 @@ async def ask_question(question: Question):
     print(sql_q)
     print(message_log)
     result = vn.run_sql(sql_q)
+    if isinstance(result, pd.DataFrame):
+        result = result.to_json()
     return result, sql_q
 
 if __name__ == "__main__":
