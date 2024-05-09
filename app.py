@@ -5,6 +5,7 @@ import os
 import prompt
 from dotenv import load_dotenv
 import pandas as pd
+import tiktoken
 
 app = FastAPI()
 
@@ -36,6 +37,10 @@ async def ask_question(question: Question):
     documentation = vn.get_related_documentation(question) # get all similar documentation
     ddl = vn.get_related_ddl(question) # get all ddl.
     message_log = prompt.get_message_log_prompt(6000, question, ddl, documentation, questions) # create prompt
+    
+    encoding = tiktoken.encoding_for_model("gpt-4-1106-preview")
+    text = str(message_log)
+    token_count = len(encoding.encode(text))
     sql_q = vn.submit_prompt(
     [
         vn.system_message(str(message_log) + 'Note: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
@@ -57,7 +62,7 @@ async def ask_question(question: Question):
         result = "Incorrect Sql generation"
     if isinstance(result, pd.DataFrame):
         result = result.to_json()
-    return result, sql_q
+    return result, sql_q, token_count
 
 if __name__ == "__main__":
     import uvicorn
