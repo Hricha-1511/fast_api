@@ -13,7 +13,7 @@ load_dotenv()
 
 # Initialize Vanna
 api_key = os.getenv('API')
-model = 'quickbooks_2'
+model = os.getenv('MODEL')
 vn = VannaDefault(model=model, api_key=api_key)
 
 # Connect to PostgreSQL
