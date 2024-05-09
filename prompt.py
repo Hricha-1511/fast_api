@@ -1,12 +1,14 @@
 def get_system_prompt(character_limit, ddl_list: list[str] = [], doc_list: list[str] = [], question_answer_list: list[dict] = []) -> str:
     initial_prompt = "The user provides a question and you provide SQL. You will only respond with SQL code and not with any explanations.\n\nRespond with only SQL code. Do not answer with any explanations -- just the code.\n"
 
-    if len(ddl_list) > 0:
-        initial_prompt += f"\nYou may use the following DDL statements as a reference for what tables might be available. Use responses to past questions also to guide you:\n\n"
+   
+    
+    if len(question_answer_list) > 0:
+        initial_prompt += f"Here are some sample question and known correct SQL:\n\n"
 
-        for ddl in ddl_list:
-            if len(initial_prompt) < character_limit: # Add DDL if it fits
-                initial_prompt += f"{ddl}\n\n"
+        for question in question_answer_list:
+            if len(initial_prompt) < character_limit:
+                initial_prompt += f"{question['question']}\n\n{question['sql']}\n\n"
 
     if len(doc_list) > 0:
         initial_prompt += f"The following information may or may not be useful in constructing the SQL to answer the question\n"
@@ -15,12 +17,13 @@ def get_system_prompt(character_limit, ddl_list: list[str] = [], doc_list: list[
             if len(initial_prompt) < character_limit: # Add Documentation if it fits
                 initial_prompt += f"{doc}\n\n"
 
-    if len(question_answer_list) > 0:
-        initial_prompt += f"Here are some sample question and known correct SQL:\n\n"
+    if len(ddl_list) > 0:
+        initial_prompt += f"\nYou may use the following DDL statements as a reference for what tables might be available. Use responses to past questions also to guide you:\n\n"
 
-        for question in question_answer_list:
-            if len(initial_prompt) < character_limit:
-                initial_prompt += f"{question['question']}\n\n{question['sql']}\n\n"
+        for ddl in ddl_list:
+            if len(initial_prompt) < character_limit: # Add DDL if it fits
+                initial_prompt += f"{ddl}\n\n"
+
 
     return initial_prompt
 
