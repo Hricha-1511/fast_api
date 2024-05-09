@@ -20,6 +20,7 @@ RUN pip install 'vanna[postgres]'
 RUN pip install uvicorn
 RUN pip install pydantic
 RUN pip install python-dotenv
-
+RUN pip install --upgrade tiktoken
+RUN pip install --upgrade openai
 # Command to run the application
 CMD [ "python", "app.py" ]
