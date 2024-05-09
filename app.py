@@ -42,6 +42,15 @@ async def ask_question(question: Question):
         vn.user_message(question),
     ]
 )
+    start_index = sql_q.find("```sql")
+    end_index = sql_q.rfind("```")
+    # If the substring "```sql" is found
+    if start_index != -1:
+    # Remove the substring "```sql" from the input string
+        sql_q = sql_q[:start_index] + sql_q[start_index + 6:end_index] + sql_q[end_index + 3:]
+    else:
+    # If the substring "```sql " is not found, output the original string
+        sql_q = sql_q
     try:
         result = vn.run_sql(sql_q)
     except Exception as e:
