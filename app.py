@@ -42,9 +42,10 @@ async def ask_question(question: Question):
         vn.user_message(question),
     ]
 )
-    print(sql_q)
-    print(message_log)
-    result = vn.run_sql(sql_q)
+    try:
+        result = vn.run_sql(sql_q)
+    except Exception as e:
+        result = "Incorrect Sql generation"
     if isinstance(result, pd.DataFrame):
         result = result.to_json()
     return result, sql_q
