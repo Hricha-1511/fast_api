@@ -58,13 +58,14 @@ async def ask_question(question: Question):
         sql_q = sql_q
     try:
         result = vn.run_sql(sql_q)
-        if len(str(result)) > 10000:
-            result = "Message Too Long to Show"
     except Exception as e:
         result = "Incorrect Sql generation"
     
     if isinstance(result, pd.DataFrame):
         result = result.to_json()
+        
+    if len(str(result)) > 25000:
+            result = "Message Too Long to Show"
     return result, sql_q, token_count
 
 if __name__ == "__main__":
