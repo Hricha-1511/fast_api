@@ -64,7 +64,7 @@ async def ask_question(question: Question):
     if isinstance(result, pd.DataFrame):
         result = result.to_json()
         
-    if len(str(result)) > 75000:
+    if len(str(result)) > 60000:
             result = "Message Too Long to Show"
     return result, sql_q, token_count
 
