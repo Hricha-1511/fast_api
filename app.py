@@ -7,6 +7,12 @@ import prompt
 from dotenv import load_dotenv
 import pandas as pd
 import tiktoken
+from vanna.openai import OpenAI_Chat
+from vanna.vannadb import VannaDB_VectorStore
+import os
+from typing import Dict, List
+
+
 
 app = FastAPI()
 
@@ -22,11 +28,19 @@ app.add_middleware(
 
 # Load environment variables
 load_dotenv()
-
+class MyVanna(VannaDB_VectorStore, OpenAI_Chat):
+    def __init__(self, config=None):
+        MY_VANNA_MODEL = os.getenv('MODEL')
+        MY_VANNA_API_KEY = os.getenv('API')
+        VannaDB_VectorStore.__init__(self, vanna_model=MY_VANNA_MODEL, vanna_api_key=MY_VANNA_API_KEY, config=config)
+        OpenAI_Chat.__init__(self, config=config)
+vn = MyVanna(config={'temperature': 0.7,
+                      'max_tokens': 2000,
+                     'api_key': os.getenv('OPENAI_API'), 'model': os.getenv('GPT_MODEL')})
 # Initialize Vanna
-api_key = os.getenv('API')
-model = os.getenv('MODEL')
-vn = VannaDefault(model=model, api_key=api_key)
+# api_key = os.getenv('API')
+# model = os.getenv('MODEL')
+# vn = VannaDefault(model=MY_VANNA_MODEL, api_key=api_key)
 
 # Connect to PostgreSQL
 vn.connect_to_postgres(
