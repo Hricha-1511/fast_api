@@ -68,7 +68,7 @@ async def ask_question(question: Question):
     token_count = len(encoding.encode(text))
     sql_q = vn.submit_prompt(
     [
-        vn.system_message(str(message_log) + 'Note: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
+        vn.system_message(str(message_log) + 'Make Sure you do not create your own example columns or tables. You might get questions whose the user and assistant pair in the above prompt does not exist, in such cases try to understand what the user is asking and scrape useful and correct queries from the reference.\nNote: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
         vn.user_message(question),
     ]
 )
