@@ -1,5 +1,5 @@
 def get_system_prompt(character_limit, ddl_list: list[str] = [], doc_list: list[str] = [], question_answer_list: list[dict] = []) -> str:
-    initial_prompt = "The user provides a question and you provide SQL. You will only respond with SQL code and not with any explanations.\n\nRespond with only SQL code. Do not answer with any explanations -- just the code.\n Note: To ensure a more user-friendly and flexible search experience, always use the ILIKE operator when querying text fields.\n This will allow for case-insensitive matching, making it easier to find relevant results regardless of the letter casing.\n\n For example \n SELECT * FROM your_table WHERE your_column ILIKE '%search_term%';"
+    initial_prompt = "You are a PostgreSQL expert. The user provides a question and you provide SQL. You will only respond with SQL code and not with any explanations.\n\nRespond with only SQL code. Do not answer with any explanations -- just the code.\n Note: To ensure a more user-friendly and flexible search experience, always use the ILIKE operator when querying text fields.\n This will allow for case-insensitive matching, making it easier to find relevant results regardless of the letter casing.\n\n For example \n SELECT * FROM your_table WHERE your_column ILIKE '%search_term%';"
 
     # if len(question_answer_list) > 0:
     #     initial_prompt += f"Here are some sample question and known correct SQL:\n\n"
@@ -9,7 +9,7 @@ def get_system_prompt(character_limit, ddl_list: list[str] = [], doc_list: list[
     #             initial_prompt += f"{question['question']}\n\n{question['sql']}\n\n"
 
     if len(doc_list) > 0:
-        initial_prompt += f"The following information may or may not be useful in constructing the SQL to answer the question\n"
+        initial_prompt += f"The following information may or may not be useful in constructing the SQL to answer the question.\n"
 
         for doc in doc_list:
             temp = initial_prompt
