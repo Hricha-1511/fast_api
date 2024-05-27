@@ -68,7 +68,7 @@ async def ask_question(question: Question):
     token_count = len(encoding.encode(text))
     sql_q = vn.submit_prompt(
     [
-        vn.system_message(str(message_log) + 'Note: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
+        vn.system_message(str(message_log) + 'Use sfhmpldata table, only when user query is related to material, items and deliveries or mentioned specifically for the table. \n\nNote: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
         vn.user_message(question),
     ]
 )
