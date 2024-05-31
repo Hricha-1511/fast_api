@@ -85,7 +85,12 @@ async def ask_question(question: Question):
         result = vn.run_sql(sql_q)
     except Exception as e:
         result = "Incorrect Sql generation"
-    
+    # Function to correct the column name
+    # 1. extract column name from error message
+    # 2. extract table name 
+    # 3. Use table name to find all correct column names
+    # 4. Calculate cosine similarity of all column names with incorrect column name.
+    # 5. sort in descending, take the first one and run sql and show the result.
     if isinstance(result, pd.DataFrame):
         result = result.to_json()
         
