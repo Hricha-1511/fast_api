@@ -61,7 +61,7 @@ async def ask_question(question: Question):
     questions = vn.get_similar_question_sql(question) #get all similar question and query pair
     documentation = vn.get_related_documentation(question) # get all similar documentation
     ddl = vn.get_related_ddl(question) # get all ddl.
-    message_log = prompt.get_message_log_prompt(6000, question, ddl, documentation, questions) # create prompt
+    message_log = prompt.get_message_log_prompt(7000, question, ddl, documentation, questions) # create prompt
     
     encoding = tiktoken.encoding_for_model("gpt-4-1106-preview")
     text = str(message_log)
