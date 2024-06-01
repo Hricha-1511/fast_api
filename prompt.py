@@ -22,7 +22,7 @@ def get_system_prompt(character_limit, ddl_list: list[str] = [], doc_list: list[
         initial_prompt += f"\nYou may use the following DDL statements as a reference for what tables might be available. Use responses to past questions also to guide you:\n\n"
 
         for ddl in ddl_list:
-            if len(initial_prompt) < 5000: # Add DDL if it fits
+            if len(initial_prompt) < 6000: # Add DDL if it fits
                 initial_prompt += f"{ddl}\n\n"
 
     
