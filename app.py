@@ -66,9 +66,10 @@ async def ask_question(question: Question):
     encoding = tiktoken.encoding_for_model("gpt-4-1106-preview")
     text = str(message_log)
     token_count = len(encoding.encode(text))
+    extra = "While searching for project name or number always search for text in middle. For example \nproject starting from 23- should be searched as ILIKE '%23-%'.\n\n"
     sql_q = vn.submit_prompt(
     [
-        vn.system_message(str(message_log) + 'Use sfhmpldata table, only when user query is related to material/items deliveries or mentioned specifically for the table. \nOur definition of project or jobs is same as customer. \n\nNote: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
+        vn.system_message(str(message_log) + extra + 'Use sfhmpldata table, only when user query is related to material/items deliveries or mentioned specifically for the table. \nOur definition of project or jobs is same as customer. \n\nNote: Remove all the extra characters like "\,\n,```sql..```". Strictly provide me the Query part.'),
         vn.user_message(question),
     ]
 )
